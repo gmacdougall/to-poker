@@ -1,0 +1,5 @@
+.bundle
+spec/examples.txt
+vendor
+.yardoc
+doc
