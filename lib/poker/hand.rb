@@ -19,7 +19,7 @@ module Poker
     end
 
     def flush?
-      # 5 cards of all the same suit
+      @cards.map { |c| c.suit }.uniq.length == 1
     end
 
     def straight?

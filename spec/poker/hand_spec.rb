@@ -41,6 +41,36 @@ RSpec.describe Poker::Hand, type: :model do
   end
 
   describe '#flush?' do
+
+    subject { hand.flush? }
+
+    context 'when all the cards are the same suit' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('6', 'Diamonds'),
+        ]
+      end
+
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when all the cards are not the same suit' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('6', 'Clubs'),
+        ]
+      end
+
+      it { is_expected.to be_falsey }
+    end
   end
 
   describe '#straight?' do
