@@ -76,24 +76,34 @@ RSpec.describe Poker::Hand, type: :model do
   end
 
   describe '#three_of_a_kind?' do
-    let(:cards) { cyo_cards(3) }
-    let(:hand) { Poker::Hand.new(cards) }
+    subject { hand.three_of_a_kind? }
 
-    it 'returns true when there are three of the same rank' do
-      expect(hand.three_of_a_kind?).to be_truthy
+    context 'when there are three of the same rank' do
+      let(:cards) {
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('2', 'Spades'),
+          Poker::Card.new('4', 'Hearts'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('2', 'Clubs'),
+        ]
+      }
+
+      it { is_expected.to be_truthy }
     end
 
-    it 'returns false when there are not three of the same rank' do
-      cards = cyo_cards(2)
-      hand = Poker::Hand.new(cards)
+    context 'when there are not three of the same rank' do
+      let(:cards) {
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('8', 'Spades'),
+          Poker::Card.new('4', 'Hearts'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('2', 'Clubs'),
+        ]
+      }
 
-      expect(hand.three_of_a_kind?).to be_falsey
-    end
-
-    it 'receives of_a_kind?' do
-      expect(hand).to receive(:of_a_kind?)
-
-      hand.three_of_a_kind?
+      it { is_expected.to be_falsey }
     end
   end
 
