@@ -46,6 +46,7 @@ module Poker
       @sets.values.any? { |s| s.length == number }
     end
 
+    private
 
     def sets
       sets = {}

@@ -3,16 +3,6 @@ require 'spec_helper'
 RSpec.describe Poker::Hand, type: :model do
   let(:hand) { Poker::Hand.new(cards) }
 
-  describe '#sets' do
-    it 'places cards into their ranking slots' do
-      cards = cyo_cards(3)
-      hand = Poker::Hand.new(cards)
-
-      expect(hand.sets[2].length).to eq(3)
-      expect(hand.sets[2].first.rank).to eq("3")
-    end
-  end
-
   describe '#straight_flush?' do
   end
 
