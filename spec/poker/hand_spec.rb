@@ -43,6 +43,19 @@ RSpec.describe Poker::Hand, type: :model do
   end
 
   describe '#straight?' do
+    let(:cards) { cyo_cards('straight') }
+    let(:hand) { Poker::Hand.new(cards) }
+
+    it 'returns true when cards rank in a row' do
+      expect(hand.straight?).to be_truthy
+    end
+
+    it 'returns false when cards do not rank in a row' do
+      cards = cyo_cards(2)
+      hand = Poker::Hand.new(cards)
+
+      expect(hand.straight?).to be_falsey
+    end
   end
 
   describe '#three_of_a_kind?' do
@@ -127,9 +140,13 @@ RSpec.describe Poker::Hand, type: :model do
           cards << Poker::Card.new(ranks[i], Poker::Card::SUITS[i])
         end
         cards << Poker::Card.new('10', 'Spades')
+      when 'straight'
+        5.times do |i|
+          cards << Poker::Card.new(Poker::Card::RANKS[i], Poker::Card::SUITS.sample)
+        end
       end
     end
 
-    cards
+    return cards
   end
 end

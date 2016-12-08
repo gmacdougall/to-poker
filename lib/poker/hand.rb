@@ -23,7 +23,7 @@ module Poker
     end
 
     def straight?
-      # any suit, ranks in a row
+      @sets.keys == (@sets.keys.first..@sets.keys.last).to_a
     end
 
     def three_of_a_kind?
