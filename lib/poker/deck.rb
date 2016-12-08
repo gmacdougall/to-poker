@@ -1,15 +1,11 @@
 module Poker
   class Deck
 
-    attr_accessor :contents
+    attr_reader :cards
 
     def initialize
-      @contents = []
+      @cards = []
       return create!
-    end
-
-    def shuffle
-      @contents.shuffle!
     end
 
     private
@@ -17,10 +13,10 @@ module Poker
     def create!
       Poker::Card::RANKS.each do |rank|
         Poker::Card::SUITS.each do |suit|
-          @contents << Poker::Card.new(rank, suit)
+          @cards << Poker::Card.new(rank, suit)
         end
       end
-      @contents
+      @cards.shuffle!
     end
   end
 end
