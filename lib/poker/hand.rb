@@ -40,10 +40,6 @@ module Poker
       of_a_kind?(2)
     end
 
-    def high_card?
-      # research more later
-    end
-
     def of_a_kind?(number)
       @sets.values.any? { |s| s.length == number }
     end
@@ -90,14 +86,3 @@ module Poker
     end
   end
 end
-
-
-# straight flush
-# four of a kind
-# full house
-# flush
-# straight
-# three of a kind
-# two pair
-# one pair
-# high card
