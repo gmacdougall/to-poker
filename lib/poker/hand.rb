@@ -23,7 +23,7 @@ module Poker
     end
 
     def straight?
-      @sets.keys == (@sets.keys.first..@sets.keys.last).to_a
+      @sets.keys.length == 5 && @sets.keys == (@sets.keys.first..@sets.keys.last).to_a
     end
 
     def three_of_a_kind?

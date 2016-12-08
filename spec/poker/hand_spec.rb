@@ -191,6 +191,20 @@ RSpec.describe Poker::Hand, type: :model do
 
       it { is_expected.to be_falsey }
     end
+
+    context 'when cards do not rank in a row' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('2', 'Hearts'),
+          Poker::Card.new('2', 'Spades'),
+          Poker::Card.new('2', 'Clubs'),
+          Poker::Card.new('3', 'Clubs'),
+        ]
+      end
+
+      it { is_expected.to be_falsey }
+    end
   end
 
   describe '#three_of_a_kind?' do
