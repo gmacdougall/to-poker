@@ -4,6 +4,49 @@ RSpec.describe Poker::Hand, type: :model do
   let(:hand) { Poker::Hand.new(cards) }
 
   describe '#straight_flush?' do
+    subject { hand.straight_flush? }
+
+    context 'all five cards are the same suit and they rank in a row' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('6', 'Diamonds'),
+        ]
+      end
+
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when the hand is not the same suit' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Spades'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('6', 'Diamonds'),
+        ]
+      end
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when the hand does not rank in a row' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('Q', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('6', 'Diamonds'),
+        ]
+      end
+
+      it { is_expected.to be_falsey }
+    end
   end
 
   describe '#four_of_a_kind?' do

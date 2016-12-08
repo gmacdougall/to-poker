@@ -7,7 +7,7 @@ module Poker
     end
 
     def straight_flush?
-      # same suit, ranks in a row
+      straight? && flush?
     end
 
     def four_of_a_kind?
