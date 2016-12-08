@@ -23,7 +23,7 @@ module Poker
     end
 
     def straight?
-      @sets.keys.length == 5 && @sets.keys == (@sets.keys.first..@sets.keys.last).to_a
+      standard_straight? || ace_low_straight?
     end
 
     def three_of_a_kind?
@@ -47,6 +47,14 @@ module Poker
     end
 
     private
+
+    def standard_straight?
+      @sets.keys.length == 5 && @sets.keys == (@sets.keys.first..@sets.keys.last).to_a
+    end
+
+    def ace_low_straight?
+      sets.keys == [1, 2, 3, 4, 13]
+    end
 
     def sets
       sets = {}

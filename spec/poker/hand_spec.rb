@@ -205,6 +205,34 @@ RSpec.describe Poker::Hand, type: :model do
 
       it { is_expected.to be_falsey }
     end
+
+    context 'when Ace is involved and a straight' do
+      let(:cards) do
+        [
+          Poker::Card.new('A', 'Clubs'),
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+        ]
+      end
+
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when Ace is involved but not a straight' do
+      let(:cards) do
+        [
+          Poker::Card.new('A', 'Clubs'),
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('K', 'Diamonds'),
+        ]
+      end
+
+      it { is_expected.to be_falsey }
+    end
   end
 
   describe '#three_of_a_kind?' do
