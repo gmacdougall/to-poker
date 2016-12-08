@@ -21,4 +21,12 @@ RSpec.describe Poker::Deck, type: :model do
       expect(deck.contents.length).to eq(52)
     end
   end
+
+  describe 'shuffle' do
+    it 'changes the contents positions' do
+      deck = Poker::Deck.new
+
+      expect { deck.shuffle }.to change{ deck.contents }
+    end
+  end
 end

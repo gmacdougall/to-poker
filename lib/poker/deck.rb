@@ -8,6 +8,10 @@ module Poker
       return create!
     end
 
+    def shuffle
+      @contents.shuffle!
+    end
+
     private
 
     def create!
