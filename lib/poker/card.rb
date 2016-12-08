@@ -9,5 +9,9 @@ module Poker
       @rank = rank
       @suit = suit
     end
+
+    def number_value
+      RANKS.index(rank) + 1
+    end
   end
 end

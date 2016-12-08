@@ -33,4 +33,12 @@ RSpec.describe Poker::Card, type: :model do
       expect(Poker::Card::RANKS).to include(*face_cards)
     end
   end
+
+  describe '#number_value' do
+    it 'returns number value of card' do
+      card = Poker::Card.new('Q', 'Hearts')
+
+      expect(card.number_value).to eq(11)
+    end
+  end
 end
