@@ -4,6 +4,8 @@ module Poker
     def initialize(cards)
       @cards = cards
       @sets = sets
+
+      raise "Hey! I don't have enough cards" if @cards.length != 5
     end
 
     def straight_flush?
