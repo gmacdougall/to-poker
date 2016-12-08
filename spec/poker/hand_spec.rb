@@ -38,6 +38,36 @@ RSpec.describe Poker::Hand, type: :model do
   end
 
   describe '#full_house?' do
+    subject { hand.full_house? }
+
+
+    context 'when 3 cards are of one rank and two of another' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('2', 'Hearts'),
+          Poker::Card.new('2', 'Spades'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('5', 'Spades'),
+        ]
+      end
+
+      it { is_expected.to be_truthy }
+    end
+
+    context 'when there arent 3 cards of the same rank nor two of another' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Hearts'),
+          Poker::Card.new('4', 'Spades'),
+          Poker::Card.new('6', 'Diamonds'),
+          Poker::Card.new('5', 'Spades'),
+        ]
+      end
+
+      it { is_expected.to be_falsey }
+    end
   end
 
   describe '#flush?' do
