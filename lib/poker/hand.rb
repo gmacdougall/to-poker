@@ -46,6 +46,28 @@ module Poker
       @sets.values.any? { |s| s.length == number }
     end
 
+    def level
+      if straight_flush?
+        8
+      elsif four_of_a_kind?
+        7
+      elsif full_house?
+        6
+      elsif flush?
+        5
+      elsif straight?
+        4
+      elsif three_of_a_kind?
+        3
+      elsif two_pair?
+        2
+      elsif one_pair?
+        1
+      else
+        0
+      end
+    end
+
     private
 
     def standard_straight?

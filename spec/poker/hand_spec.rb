@@ -330,4 +330,23 @@ RSpec.describe Poker::Hand, type: :model do
       it { is_expected.to be_falsey }
     end
   end
+
+  describe '#level' do
+
+    context 'when the hand is a straight flush' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('6', 'Diamonds'),
+        ]
+      end
+
+      it 'returns a number associating the level of the hand' do
+        expect(hand.level).to eq(8)
+      end
+    end
+  end
 end
