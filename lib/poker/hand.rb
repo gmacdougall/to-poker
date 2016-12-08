@@ -15,7 +15,7 @@ module Poker
     end
 
     def full_house?
-      # 3 cards of one rank, 2 cards of another rank
+      three_of_a_kind? && one_pair?
     end
 
     def flush?
