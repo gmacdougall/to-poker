@@ -170,35 +170,4 @@ RSpec.describe Poker::Hand, type: :model do
       it { is_expected.to be_falsey }
     end
   end
-
-
-  def cyo_cards(type)
-    cards = []
-
-    if type.is_a? Integer
-      type.times do |i|
-        cards << Poker::Card.new('3', Poker::Card::SUITS[i])
-      end
-      cards_left = (5 - type)
-
-      cards_left.times do |i|
-        cards << Poker::Card.new((4..10).to_a.map(&:to_s).sample, Poker::Card::SUITS[i])
-      end
-    else
-      case type
-      when 'two_pair'
-        ranks = ['2', '2', '3', '3']
-        4.times do |i|
-          cards << Poker::Card.new(ranks[i], Poker::Card::SUITS[i])
-        end
-        cards << Poker::Card.new('10', 'Spades')
-      when 'straight'
-        5.times do |i|
-          cards << Poker::Card.new(Poker::Card::RANKS[i], Poker::Card::SUITS.sample)
-        end
-      end
-    end
-
-    return cards
-  end
 end
