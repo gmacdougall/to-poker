@@ -31,7 +31,7 @@ module Poker
     end
 
     def two_pair?
-      # two of one rank, two of another rank, and one of a different rank
+      one_pair? && @sets.select {|k,v| v.length == 2}.length == 2
     end
 
     def one_pair?

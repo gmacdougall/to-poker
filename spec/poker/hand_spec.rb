@@ -68,6 +68,20 @@ RSpec.describe Poker::Hand, type: :model do
   end
 
   describe '#two_pair?' do
+    let(:cards) { cyo_cards('two_pair') }
+    let(:hand) { Poker::Hand.new(cards) }
+
+    it 'returns true when there are two different pairs in the hand' do
+
+      expect(hand.two_pair?).to be_truthy
+    end
+
+    it 'returns true when there is only one pair in the hand' do
+      cards = cyo_cards(2)
+      hand = Poker::Hand.new(cards)
+
+      expect(hand.two_pair?).to be_falsey
+    end
   end
 
   describe '#one_pair?' do
@@ -104,6 +118,15 @@ RSpec.describe Poker::Hand, type: :model do
 
       cards_left.times do |i|
         cards << Poker::Card.new((4..10).to_a.map(&:to_s).sample, Poker::Card::SUITS[i])
+      end
+    else
+      case type
+      when 'two_pair'
+        ranks = ['2', '2', '3', '3']
+        4.times do |i|
+          cards << Poker::Card.new(ranks[i], Poker::Card::SUITS[i])
+        end
+        cards << Poker::Card.new('10', 'Spades')
       end
     end
 
