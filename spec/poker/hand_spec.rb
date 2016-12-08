@@ -40,28 +40,43 @@ RSpec.describe Poker::Hand, type: :model do
   describe '#full_house?' do
     subject { hand.full_house? }
 
+    context 'when there are three cards of one rank' do
+      context 'when the other two cards are the same rank' do
+        let(:cards) do
+          [
+            Poker::Card.new('2', 'Diamonds'),
+            Poker::Card.new('2', 'Hearts'),
+            Poker::Card.new('2', 'Spades'),
+            Poker::Card.new('5', 'Diamonds'),
+            Poker::Card.new('5', 'Spades'),
+          ]
+        end
 
-    context 'when 3 cards are of one rank and two of another' do
+        it { is_expected.to be_truthy }
+      end
+
+      context 'when the other two cards are a different rank' do
+        let(:cards) do
+          [
+            Poker::Card.new('2', 'Diamonds'),
+            Poker::Card.new('2', 'Hearts'),
+            Poker::Card.new('2', 'Spades'),
+            Poker::Card.new('8', 'Diamonds'),
+            Poker::Card.new('5', 'Spades'),
+          ]
+        end
+
+        it { is_expected.to be_falsey }
+      end
+    end
+
+    context 'when there are not three cards of one rank' do
       let(:cards) do
         [
           Poker::Card.new('2', 'Diamonds'),
           Poker::Card.new('2', 'Hearts'),
-          Poker::Card.new('2', 'Spades'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('5', 'Spades'),
-        ]
-      end
-
-      it { is_expected.to be_truthy }
-    end
-
-    context 'when there arent 3 cards of the same rank nor two of another' do
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Hearts'),
           Poker::Card.new('4', 'Spades'),
-          Poker::Card.new('6', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
           Poker::Card.new('5', 'Spades'),
         ]
       end
