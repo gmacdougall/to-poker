@@ -108,19 +108,34 @@ RSpec.describe Poker::Hand, type: :model do
   end
 
   describe '#two_pair?' do
-    let(:cards) { cyo_cards('two_pair') }
-    let(:hand) { Poker::Hand.new(cards) }
+    subject { hand.two_pair? }
 
-    it 'returns true when there are two different pairs in the hand' do
+    context 'when there are two different pairs in the hand' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('3', 'Hearts'),
+          Poker::Card.new('2', 'Clubs'),
+        ]
+      end
 
-      expect(hand.two_pair?).to be_truthy
+      it { is_expected.to be_truthy }
     end
 
-    it 'returns true when there is only one pair in the hand' do
-      cards = cyo_cards(2)
-      hand = Poker::Hand.new(cards)
+    context 'when there is only one pair in the hand' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('2', 'Clubs'),
+        ]
+      end
 
-      expect(hand.two_pair?).to be_falsey
+      it { is_expected.to be_falsey }
     end
   end
 
