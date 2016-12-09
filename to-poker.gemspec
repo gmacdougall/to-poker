@@ -12,6 +12,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency('rake')
   gem.add_development_dependency('rspec', [">= 3.5.0"])
+  gem.add_development_dependency('factory_girl')
 
   # ensure the gem is built out of versioned files
   gem.files = Dir['Rakefile', '{bin,lib,man,test,spec}/**/*', 'README*', 'LICENSE*'] & `git ls-files -z`.split("\0")
