@@ -31,7 +31,7 @@ module Poker
     end
 
     def two_pair?
-      one_pair? && @sets.select {|k,v| v.length == 2}.length == 2
+      one_pair? && @sets.select { |k,v| v == 2 }.length == 2
     end
 
     def one_pair?
@@ -39,7 +39,7 @@ module Poker
     end
 
     def of_a_kind?(number)
-      @sets.values.any? { |s| s.length == number }
+      @sets.values.any? {|s| s == number }
     end
 
     def level
@@ -75,12 +75,12 @@ module Poker
     end
 
     def sets
-      sets = {}
-      @cards.each {|c| sets[c.number_value] = [] }
-      @cards.each do |c|
-        sets[c.number_value] << c
+      sets = @cards.inject(Hash.new(0)) do |hash, card|
+        hash[card.number_value] += 1
+        hash
       end
-      sets.sort_by {|k,v| k}.to_h
+
+      Hash[sets.sort]
     end
   end
 end
