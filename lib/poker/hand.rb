@@ -75,7 +75,11 @@ module Poker
 
     def sorted_sets
       # &:reverse makes sure that the hash sorts by value first then key
-      @sets.sort_by(&:reverse).reverse.to_h.keys
+      @sorted_sets = @sets.sort_by(&:reverse).reverse.to_h.keys
+
+      adjust_ace if ace_low_straight?
+
+      @sorted_sets
     end
 
     private
@@ -86,6 +90,11 @@ module Poker
 
     def ace_low_straight?
       sets.keys == [1, 2, 3, 4, 13]
+    end
+
+    def adjust_ace
+      @sorted_sets.shift
+      @sorted_sets.push(0)
     end
 
     def sets

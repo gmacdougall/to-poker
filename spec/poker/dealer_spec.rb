@@ -4,6 +4,8 @@ require 'spec_helper'
 RSpec.describe Poker::Dealer, type: :model do
   let(:dealer) { Poker::Dealer.new(3) }
   let(:straight_flush) { FactoryGirl.build(:straight_flush) }
+  let(:straight) { FactoryGirl.build(:straight) }
+  let(:straight_with_ace) { FactoryGirl.build(:straight_with_ace) }
   let(:three_of_a_kind) { FactoryGirl.build(:three_of_a_kind) }
   let(:one_pair) { FactoryGirl.build(:one_pair) }
 
@@ -72,6 +74,19 @@ RSpec.describe Poker::Dealer, type: :model do
         ])
 
         expect(dealer.winner).to eq([hand2])
+      end
+    end
+
+    context 'with ace low straight and normal straight' do
+
+      it 'picks the straight to win' do
+        dealer.instance_variable_set("@hands", [
+          straight,
+          straight_with_ace,
+          one_pair,
+        ])
+
+        expect(dealer.winner).to eq([straight])
       end
     end
   end

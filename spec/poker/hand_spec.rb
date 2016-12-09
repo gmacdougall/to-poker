@@ -396,7 +396,10 @@ RSpec.describe Poker::Hand, type: :model do
       end
 
       it 'array equals sets highest key' do
-        expect(hand.sorted_sets[0]).to eq(hand.send(:sets).keys.last)
+        highest_sorted_key = hand.sorted_sets[0]
+        sets = highest_sets_key = hand.send(:sets).keys.last
+
+        expect(highest_sorted_key).to eq(highest_sets_key)
       end
     end
 
@@ -413,6 +416,16 @@ RSpec.describe Poker::Hand, type: :model do
         second_highest = hand.sorted_sets[1]
 
         expect(hand.send(:sets)[second_highest]).to eq(2)
+      end
+    end
+
+    context 'with ace low straight' do
+      let(:hand) { FactoryGirl.build(:straight_with_ace) }
+
+      it 'matches the adjust ace low straight array' do
+        adj_ace_low_straight_array = [0, 1, 2, 3, 4]
+
+        expect(hand.sorted_sets).to match_array(adj_ace_low_straight_array)
       end
     end
   end
