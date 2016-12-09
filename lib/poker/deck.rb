@@ -4,19 +4,12 @@ module Poker
     attr_reader :cards
 
     def initialize
-      @cards = []
-      return create!
-    end
-
-    private
-
-    def create!
-      Poker::Card::RANKS.each do |rank|
-        Poker::Card::SUITS.each do |suit|
-          @cards << Poker::Card.new(rank, suit)
+      @cards = Poker::Card::RANKS.flat_map do |rank|
+        Poker::Card::SUITS.flat_map do |suit|
+          Poker::Card.new(rank, suit)
         end
-      end
-      @cards.shuffle!
+      end.shuffle!
     end
+
   end
 end

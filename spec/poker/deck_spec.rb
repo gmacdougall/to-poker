@@ -9,11 +9,6 @@ RSpec.describe Poker::Deck, type: :model do
       expect(deck.cards).to_not be_nil
       expect(deck.cards).to be_kind_of(Array)
     end
-    it 'receives create on initialize' do
-      expect_any_instance_of(Poker::Deck).to receive(:create!)
-
-      Poker::Deck.new
-    end
 
     it 'cards has length of 52' do
       deck = Poker::Deck.new
