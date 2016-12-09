@@ -9,9 +9,7 @@ module Poker
     end
 
     def deal_round
-      @num_players.times do
-        @hands << deal
-      end
+      @hands = Array.new(@num_players) { deal }
     end
 
     def winner
