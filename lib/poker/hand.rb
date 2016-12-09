@@ -66,15 +66,15 @@ module Poker
     end
 
     def <=>(other_hand)
-      other_sets = other_hand.send(:sets)
       lvl_compare = level <=> other_hand.level
 
       return lvl_compare unless lvl_compare == 0
 
-      total = sets.map {|k,v| k*v}.reduce(0, :+)
-      other_hand_total = other_sets.map {|k,v| k*v}.reduce(0, :+)
+      sorted_sets <=> other_hand.sorted_sets
+    end
 
-      total <=> other_hand_total
+    def sorted_sets
+      @sets.sort_by { |rank,matches| rank*100+matches }.reverse.to_h.keys
     end
 
     private

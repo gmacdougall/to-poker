@@ -376,67 +376,153 @@ RSpec.describe Poker::Hand, type: :model do
   describe '<=>' do
     context 'when the hands are not the same level' do
 
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Hearts'),
-          Poker::Card.new('Q', 'Diamonds'),
-          Poker::Card.new('2', 'Clubs'),
-          Poker::Card.new('7', 'Diamonds'),
-          Poker::Card.new('2', 'Spades'),
-        ]
+      it 'returns true with >' do
+        hand1 = FactoryGirl.build(:straight_flush)
+        hand2 = FactoryGirl.build(:straight)
+
+        expect(hand1).to be > hand2
       end
-      let(:cards2) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('2', 'Clubs'),
-        ]
-      end
-      let(:hand2) { Poker::Hand.new(cards2) }
 
       it 'returns false with ==' do
-        expect(hand == hand2).to be_falsey
+        hand1 = FactoryGirl.build(:straight_flush)
+        hand2 = FactoryGirl.build(:straight)
+
+        expect(hand1).to_not be == hand2
       end
 
-      it 'returns false with <' do
-        expect(hand < hand2).to be_falsey
-      end
+      it 'returns false with ==' do
+        hand1 = FactoryGirl.build(:straight_flush)
+        hand2 = FactoryGirl.build(:straight)
 
-      it 'returns true with >' do
-        expect(hand > hand2).to be_truthy
+        expect(hand1).to_not be < hand2
       end
     end
 
-    context 'when both hand levels are the same but one has higher cards' do
+    context 'when both hand levels are the same' do
+      context 'hand2 has higher match cards' do
+
+        it 'returns true' do
+          hand1 = FactoryGirl.build(:two_pair)
+          hand2 = FactoryGirl.build(:two_pair, one_pair_rank: 'Q')
+
+          expect(hand1).to be < hand2
+        end
+      end
+
+      context 'hand2 has a higher high card' do
+        it 'returns true' do
+          hand1 = FactoryGirl.build(:two_pair)
+          hand2 = FactoryGirl.build(:two_pair, high_card: 'Q')
+
+          expect(hand1).to be < hand2
+        end
+      end
+    end
+
+    context 'when both hands ranks are exactly the same' do
+      # Crazy scenario
+      it 'returns true' do
+        hand1 = FactoryGirl.build(:flush)
+        hand2 = FactoryGirl.build(:flush)
+
+        expect(hand1).to be == hand2
+      end
+    end
+
+    context 'when there are no matches' do
+      context 'when all the cards are the same except one' do
+        let(:cards) do
+          [
+            Poker::Card.new('2', 'Diamonds'),
+            Poker::Card.new('2', 'Hearts'),
+            Poker::Card.new('8', 'Hearts'),
+            Poker::Card.new('5', 'Spades'),
+            Poker::Card.new('K', 'Hearts'),
+          ]
+        end
+        let(:cards2) do
+          [
+            Poker::Card.new('2', 'Hearts'),
+            Poker::Card.new('2', 'Diamonds'),
+            Poker::Card.new('8', 'Spades'),
+            Poker::Card.new('5', 'Clubs'),
+            Poker::Card.new('Q', 'Diamonds'),
+          ]
+        end
+
+        let(:hand2) { Poker::Hand.new(cards2) }
+
+        it 'returns true for hand1 being greater than hand2' do
+          expect(hand).to be > hand2
+        end
+      end
+    end
+
+    context 'when hands are same level but one hand has a higher match' do
       let(:cards) do
         [
           Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('2', 'Clubs'),
+          Poker::Card.new('2', 'Hearts'),
+          Poker::Card.new('8', 'Hearts'),
+          Poker::Card.new('5', 'Spades'),
+          Poker::Card.new('K', 'Hearts'),
         ]
       end
       let(:cards2) do
         [
-          Poker::Card.new('2', 'Hearts'),
+          Poker::Card.new('3', 'Hearts'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('8', 'Spades'),
+          Poker::Card.new('5', 'Clubs'),
           Poker::Card.new('Q', 'Diamonds'),
-          Poker::Card.new('3', 'Clubs'),
-          Poker::Card.new('7', 'Diamonds'),
-          Poker::Card.new('2', 'Spades'),
         ]
       end
       let(:hand2) { Poker::Hand.new(cards2) }
 
+      it 'returns true for hand2 being greater than hand1' do
+        expect(hand).to be < hand2
+      end
+    end
+  end
 
-      it 'returns false when asking if first hand is greater' do
-        expect(hand > hand2).to be_falsey
+  describe '#sorted_sets' do
+    context 'with no matches' do
+      let(:hand) do
+        Poker::Hand.new(
+          [
+            Poker::Card.new('3', 'Hearts'),
+            Poker::Card.new('2', 'Diamonds'),
+            Poker::Card.new('8', 'Spades'),
+            Poker::Card.new('5', 'Clubs'),
+            Poker::Card.new('Q', 'Diamonds'),
+          ]
+        )
       end
 
-      it 'returns true when asking if second hand is greater' do
-        expect(hand < hand2).to be_truthy
+      it 'match decesending array' do
+        sorted_set_array = [11, 7, 4, 2, 1]
+
+        expect(hand.sorted_sets).to match_array(sorted_set_array)
+      end
+
+      it 'array equals sets highest key' do
+        expect(hand.sorted_sets[0]).to eq(hand.send(:sets).keys.last)
+      end
+    end
+
+    context 'with two pair' do
+      let(:hand) { FactoryGirl.build(:two_pair) }
+
+      it 'sorts to put the highest rank with the most matches first' do
+        highest_rank = hand.sorted_sets[0]
+
+        expect(hand.send(:sets)[highest_rank]).to eq(2)
+      end
+
+      it 'sorts to put the second rank with the most matches second' do
+        second_highest = hand.sorted_sets[1]
+
+        expect(hand.send(:sets)[second_highest]).to eq(2)
       end
     end
   end
