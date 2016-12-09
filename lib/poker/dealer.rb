@@ -15,17 +15,9 @@ module Poker
     end
 
     def winner
-      hand_rankings = {}
+      max_key = @hands.map { |h| h.level }.max
 
-      @hands.each {|h| hand_rankings[h.level] = [] }
-      @hands.each do |h|
-        hand_rankings[h.level] << h
-      end
-
-      max_key = hand_rankings.keys.max
-      hand_rankings.select! { |k,v| k == max_key }
-
-      hand_rankings[max_key]
+      @hands.select { |h| h.level == max_key }
     end
 
 
