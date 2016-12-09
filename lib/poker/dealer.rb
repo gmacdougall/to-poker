@@ -15,9 +15,7 @@ module Poker
     end
 
     def winner
-      max_key = @hands.map { |h| h.level }.max
-
-      @hands.select { |h| h.level == max_key }
+      @hands.select { |hand| hand == @hands.max }
     end
 
 

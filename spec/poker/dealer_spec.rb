@@ -3,6 +3,9 @@ require 'spec_helper'
 
 RSpec.describe Poker::Dealer, type: :model do
   let(:dealer) { Poker::Dealer.new(3) }
+  let(:straight_flush) { FactoryGirl.build(:straight_flush) }
+  let(:three_of_a_kind) { FactoryGirl.build(:three_of_a_kind) }
+  let(:one_pair) { FactoryGirl.build(:one_pair) }
 
   describe '#deal_round' do
     subject { dealer.deal_round }
@@ -13,53 +16,63 @@ RSpec.describe Poker::Dealer, type: :model do
   end
 
   describe '#winner' do
-    let(:straight_flush) {
-      Poker::Hand.new([
-        Poker::Card.new('2', 'Diamonds'),
-        Poker::Card.new('3', 'Diamonds'),
-        Poker::Card.new('4', 'Diamonds'),
-        Poker::Card.new('5', 'Diamonds'),
-        Poker::Card.new('6', 'Diamonds'),
-      ])
-    }
     before do
       dealer.deal_round
     end
+
     it 'returns the hand of the winner' do
       dealer.instance_variable_set("@hands", [
         straight_flush,
-        Poker::Hand.new([
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('8', 'Spades'),
-          Poker::Card.new('4', 'Hearts'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('2', 'Clubs'),
-        ]),
-        Poker::Hand.new([
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('2', 'Hearts'),
-          Poker::Card.new('2', 'Spades'),
-          Poker::Card.new('8', 'Diamonds'),
-          Poker::Card.new('5', 'Spades'),
-        ]),
+        one_pair,
+        three_of_a_kind,
       ])
 
       expect(dealer.winner).to eq([straight_flush])
     end
+
     it 'returns a tie of winners' do
       dealer.instance_variable_set("@hands", [
         straight_flush,
         straight_flush,
-        Poker::Hand.new([
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('2', 'Hearts'),
-          Poker::Card.new('2', 'Spades'),
-          Poker::Card.new('8', 'Diamonds'),
-          Poker::Card.new('5', 'Spades'),
-        ]),
+        three_of_a_kind,
       ])
 
       expect(dealer.winner).to eq([straight_flush, straight_flush])
+    end
+
+    context 'all hands have no matches' do
+      let(:hand) do
+        Poker::Hand.new(
+          [
+            Poker::Card.new('3', 'Hearts'),
+            Poker::Card.new('2', 'Diamonds'),
+            Poker::Card.new('8', 'Spades'),
+            Poker::Card.new('5', 'Clubs'),
+            Poker::Card.new('Q', 'Diamonds'),
+          ]
+        )
+      end
+      let(:hand2) do
+        Poker::Hand.new(
+          [
+            Poker::Card.new('3', 'Hearts'),
+            Poker::Card.new('2', 'Diamonds'),
+            Poker::Card.new('8', 'Spades'),
+            Poker::Card.new('5', 'Clubs'),
+            Poker::Card.new('K', 'Diamonds'),
+          ]
+        )
+      end
+
+      it 'picks the hand with the highest card' do
+        dealer.instance_variable_set("@hands", [
+          hand,
+          hand,
+          hand2
+        ])
+
+        expect(dealer.winner).to eq([hand2])
+      end
     end
   end
 end
