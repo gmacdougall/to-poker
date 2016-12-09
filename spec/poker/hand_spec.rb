@@ -7,6 +7,7 @@ RSpec.describe Poker::Hand, type: :model do
   let(:full_house) { FactoryGirl.build(:full_house) }
   let(:flush) { FactoryGirl.build(:flush) }
   let(:straight) { FactoryGirl.build(:straight) }
+  let(:straight_with_ace) { FactoryGirl.build(:straight_with_ace) }
   let(:three_of_a_kind) { FactoryGirl.build(:three_of_a_kind) }
   let(:two_pair) { FactoryGirl.build(:two_pair) }
   let(:one_pair) { FactoryGirl.build(:one_pair) }
@@ -15,15 +16,7 @@ RSpec.describe Poker::Hand, type: :model do
     subject { hand.straight_flush? }
 
     context 'all five cards are the same suit and they rank in a row' do
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('6', 'Diamonds'),
-        ]
-      end
+      let(:hand) { straight_flush }
 
       it { is_expected.to be_truthy }
     end
@@ -59,17 +52,10 @@ RSpec.describe Poker::Hand, type: :model do
 
   describe '#four_of_a_kind?' do
     subject { hand.four_of_a_kind? }
-    let(:cards) {
-      [
-        Poker::Card.new('2', 'Diamonds'),
-        Poker::Card.new('2', 'Spades'),
-        Poker::Card.new('2', 'Hearts'),
-        Poker::Card.new('5', 'Diamonds'),
-        Poker::Card.new('2', 'Clubs'),
-      ]
-    }
 
     context 'when there are four of the same rank' do
+      let(:hand) { four_of_a_kind }
+
       it { is_expected.to be_truthy }
     end
 
@@ -93,44 +79,20 @@ RSpec.describe Poker::Hand, type: :model do
 
     context 'when there are three cards of one rank' do
       context 'when the other two cards are the same rank' do
-        let(:cards) do
-          [
-            Poker::Card.new('2', 'Diamonds'),
-            Poker::Card.new('2', 'Hearts'),
-            Poker::Card.new('2', 'Spades'),
-            Poker::Card.new('5', 'Diamonds'),
-            Poker::Card.new('5', 'Spades'),
-          ]
-        end
+        let(:hand) { full_house }
 
         it { is_expected.to be_truthy }
       end
 
       context 'when the other two cards are a different rank' do
-        let(:cards) do
-          [
-            Poker::Card.new('2', 'Diamonds'),
-            Poker::Card.new('2', 'Hearts'),
-            Poker::Card.new('2', 'Spades'),
-            Poker::Card.new('8', 'Diamonds'),
-            Poker::Card.new('5', 'Spades'),
-          ]
-        end
+        let(:hand) { three_of_a_kind }
 
         it { is_expected.to be_falsey }
       end
     end
 
     context 'when there are not three cards of one rank' do
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('2', 'Hearts'),
-          Poker::Card.new('4', 'Spades'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('5', 'Spades'),
-        ]
-      end
+      let(:hand) { one_pair }
 
       it { is_expected.to be_falsey }
     end
@@ -141,15 +103,7 @@ RSpec.describe Poker::Hand, type: :model do
     subject { hand.flush? }
 
     context 'when all the cards are the same suit' do
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('6', 'Diamonds'),
-        ]
-      end
+      let(:hand) { flush }
 
       it { is_expected.to be_truthy }
     end
@@ -173,15 +127,7 @@ RSpec.describe Poker::Hand, type: :model do
     subject { hand.straight? }
 
     context 'when cards rank in a row' do
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('6', 'Clubs'),
-        ]
-      end
+      let(:hand) { straight }
 
       it { is_expected.to be_truthy }
     end
@@ -215,15 +161,7 @@ RSpec.describe Poker::Hand, type: :model do
     end
 
     context 'when Ace is involved and a straight' do
-      let(:cards) do
-        [
-          Poker::Card.new('A', 'Clubs'),
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('5', 'Diamonds'),
-        ]
-      end
+      let(:hand) { straight_with_ace }
 
       it { is_expected.to be_truthy }
     end
@@ -247,29 +185,13 @@ RSpec.describe Poker::Hand, type: :model do
     subject { hand.three_of_a_kind? }
 
     context 'when there are three of the same rank' do
-      let(:cards) {
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('2', 'Spades'),
-          Poker::Card.new('4', 'Hearts'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('2', 'Clubs'),
-        ]
-      }
+      let(:hand) { three_of_a_kind }
 
       it { is_expected.to be_truthy }
     end
 
     context 'when there are not three of the same rank' do
-      let(:cards) {
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('8', 'Spades'),
-          Poker::Card.new('4', 'Hearts'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('2', 'Clubs'),
-        ]
-      }
+      let(:hand) { straight } # straights cant have same rank
 
       it { is_expected.to be_falsey }
     end
@@ -279,29 +201,13 @@ RSpec.describe Poker::Hand, type: :model do
     subject { hand.two_pair? }
 
     context 'when there are two different pairs in the hand' do
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('3', 'Hearts'),
-          Poker::Card.new('2', 'Clubs'),
-        ]
-      end
+      let(:hand) { two_pair }
 
       it { is_expected.to be_truthy }
     end
 
     context 'when there is only one pair in the hand' do
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('2', 'Clubs'),
-        ]
-      end
+      let(:hand) { one_pair }
 
       it { is_expected.to be_falsey }
     end
@@ -311,29 +217,13 @@ RSpec.describe Poker::Hand, type: :model do
     subject { hand.one_pair? }
 
     context 'when there are two of the same rank' do
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('2', 'Clubs'),
-        ]
-      end
+      let(:hand) { one_pair }
 
       it { is_expected.to be_truthy }
     end
 
     context 'when there are not two of the same rank' do
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('6', 'Clubs'),
-        ]
-      end
+      let(:hand) { straight } # straights cant have same rank
 
       it { is_expected.to be_falsey }
     end
