@@ -74,7 +74,8 @@ module Poker
     end
 
     def sorted_sets
-      @sets.sort_by { |rank,matches| rank*100+matches }.reverse.to_h.keys
+      # &:reverse makes sure that the hash sorts by value first then key
+      @sets.sort_by(&:reverse).reverse.to_h.keys
     end
 
     private
