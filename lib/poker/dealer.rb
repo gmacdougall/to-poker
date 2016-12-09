@@ -1,5 +1,7 @@
 module Poker
   class Dealer
+    class EmptyDeckError < StandardError; end
+
     attr_reader :deck, :hands
 
     def initialize(num_players)
@@ -31,6 +33,8 @@ module Poker
 
     def deal
       Poker::Hand.new(@deck.cards.pop(5))
+
+      raise EmptyDeckError if @deck.cards.empty?
     end
   end
 end

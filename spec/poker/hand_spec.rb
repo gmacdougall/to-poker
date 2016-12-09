@@ -3,16 +3,6 @@ require 'spec_helper'
 RSpec.describe Poker::Hand, type: :model do
   let(:hand) { Poker::Hand.new(cards) }
 
-  it 'raises error if not enough cards are delt' do
-    cards = [
-      Poker::Card.new('2', 'Diamonds'),
-      Poker::Card.new('3', 'Diamonds'),
-      Poker::Card.new('4', 'Diamonds'),
-    ]
-
-    expect { Poker::Hand.new(cards) }.to raise_error
-  end
-
   describe '#straight_flush?' do
     subject { hand.straight_flush? }
 
