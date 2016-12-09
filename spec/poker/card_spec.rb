@@ -18,7 +18,7 @@ RSpec.describe Poker::Card, type: :model do
     it 'should include Hearts, Diamonds, Clubs, and Spades' do
       suits = ["Hearts", "Diamonds", "Clubs", "Spades"]
 
-      expect(Poker::Card::SUITS).to include(*suits)
+      expect(Poker::Card::SUITS).to match_array(suits)
     end
   end
 
