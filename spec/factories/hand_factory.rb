@@ -53,9 +53,9 @@ FactoryGirl.define do
     initialize_with do
       new(
         [
-          Poker::Card.new('2', 'Spades'),
+          Poker::Card.new('2', 'Hearts'),
           Poker::Card.new('3', 'Hearts'),
-          Poker::Card.new('4', 'Hearts'),
+          Poker::Card.new('8', 'Hearts'),
           Poker::Card.new('5', 'Hearts'),
           Poker::Card.new('6', 'Hearts'),
         ]
@@ -80,11 +80,13 @@ FactoryGirl.define do
   factory :straight_with_ace, class: Poker::Hand do
     initialize_with do
       new(
-        Poker::Card.new('A', 'Clubs'),
-        Poker::Card.new('2', 'Diamonds'),
-        Poker::Card.new('3', 'Diamonds'),
-        Poker::Card.new('4', 'Diamonds'),
-        Poker::Card.new('5', 'Diamonds'),
+        [
+          Poker::Card.new('A', 'Clubs'),
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+        ]
       )
     end
   end
