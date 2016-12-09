@@ -2,6 +2,14 @@ require 'spec_helper'
 
 RSpec.describe Poker::Hand, type: :model do
   let(:hand) { Poker::Hand.new(cards) }
+  let(:straight_flush) { FactoryGirl.build(:straight_flush) }
+  let(:four_of_a_kind) { FactoryGirl.build(:four_of_a_kind) }
+  let(:full_house) { FactoryGirl.build(:full_house) }
+  let(:flush) { FactoryGirl.build(:flush) }
+  let(:straight) { FactoryGirl.build(:straight) }
+  let(:three_of_a_kind) { FactoryGirl.build(:three_of_a_kind) }
+  let(:two_pair) { FactoryGirl.build(:two_pair) }
+  let(:one_pair) { FactoryGirl.build(:one_pair) }
 
   describe '#straight_flush?' do
     subject { hand.straight_flush? }
@@ -332,20 +340,35 @@ RSpec.describe Poker::Hand, type: :model do
   end
 
   describe '#level' do
-
     context 'when the hand is a straight flush' do
-      let(:cards) do
-        [
-          Poker::Card.new('2', 'Diamonds'),
-          Poker::Card.new('3', 'Diamonds'),
-          Poker::Card.new('4', 'Diamonds'),
-          Poker::Card.new('5', 'Diamonds'),
-          Poker::Card.new('6', 'Diamonds'),
-        ]
+      subject { straight_flush.level }
+
+      context 'comparing if greater than a full_house' do
+        it { is_expected.to be > full_house.level }
       end
 
-      it 'returns a number associating the level of the hand' do
-        expect(hand.level).to eq(8)
+      context 'comparing if greater than a straight' do
+        it { is_expected.to be > straight.level }
+      end
+
+      context 'comparing if greater than a flush' do
+        it { is_expected.to be > flush.level }
+      end
+
+      context 'comparing if greater than a four_of_a_kind' do
+        it { is_expected.to be > four_of_a_kind.level }
+      end
+
+      context 'comparing if greater than a three_of_a_kind' do
+        it { is_expected.to be > three_of_a_kind.level }
+      end
+
+      context 'comparing if greater than a two_pair' do
+        it { is_expected.to be > two_pair.level }
+      end
+
+      context 'comparing if greater than a one_pair' do
+        it { is_expected.to be > one_pair.level }
       end
     end
   end
