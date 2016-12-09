@@ -1,5 +1,6 @@
 module Poker
   class Hand
+    include Comparable
 
     def initialize(cards)
       @cards = cards
@@ -62,6 +63,18 @@ module Poker
       else
         0
       end
+    end
+
+    def <=>(other_hand)
+      other_sets = other_hand.send(:sets)
+      lvl_compare = level <=> other_hand.level
+
+      return lvl_compare unless lvl_compare == 0
+
+      total = sets.map {|k,v| k*v}.reduce(0, :+)
+      other_hand_total = other_sets.map {|k,v| k*v}.reduce(0, :+)
+
+      total <=> other_hand_total
     end
 
     private

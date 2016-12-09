@@ -349,4 +349,72 @@ RSpec.describe Poker::Hand, type: :model do
       end
     end
   end
+
+  describe '<=>' do
+    context 'when the hands are not the same level' do
+
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Hearts'),
+          Poker::Card.new('Q', 'Diamonds'),
+          Poker::Card.new('2', 'Clubs'),
+          Poker::Card.new('7', 'Diamonds'),
+          Poker::Card.new('2', 'Spades'),
+        ]
+      end
+      let(:cards2) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('2', 'Clubs'),
+        ]
+      end
+      let(:hand2) { Poker::Hand.new(cards2) }
+
+      it 'returns false with ==' do
+        expect(hand == hand2).to be_falsey
+      end
+
+      it 'returns false with <' do
+        expect(hand < hand2).to be_falsey
+      end
+
+      it 'returns true with >' do
+        expect(hand > hand2).to be_truthy
+      end
+    end
+
+    context 'when both hand levels are the same but one has higher cards' do
+      let(:cards) do
+        [
+          Poker::Card.new('2', 'Diamonds'),
+          Poker::Card.new('3', 'Diamonds'),
+          Poker::Card.new('4', 'Diamonds'),
+          Poker::Card.new('5', 'Diamonds'),
+          Poker::Card.new('2', 'Clubs'),
+        ]
+      end
+      let(:cards2) do
+        [
+          Poker::Card.new('2', 'Hearts'),
+          Poker::Card.new('Q', 'Diamonds'),
+          Poker::Card.new('3', 'Clubs'),
+          Poker::Card.new('7', 'Diamonds'),
+          Poker::Card.new('2', 'Spades'),
+        ]
+      end
+      let(:hand2) { Poker::Hand.new(cards2) }
+
+
+      it 'returns false when asking if first hand is greater' do
+        expect(hand > hand2).to be_falsey
+      end
+
+      it 'returns true when asking if second hand is greater' do
+        expect(hand < hand2).to be_truthy
+      end
+    end
+  end
 end
