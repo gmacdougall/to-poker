@@ -1,5 +1,6 @@
 module Poker
   class Deck
+    include Enumerable
 
     attr_reader :cards
 
@@ -9,6 +10,10 @@ module Poker
           Poker::Card.new(rank, suit)
         end
       end.shuffle!
+    end
+
+    def each(&block)
+      @cards.each(&block)
     end
 
   end
