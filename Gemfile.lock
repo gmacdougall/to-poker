@@ -18,6 +18,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-doc (0.10.0)
+      pry (~> 0.9)
+      yard (~> 0.9)
     pry-rescue (1.4.4)
       interception (>= 0.5)
       pry
@@ -39,7 +42,7 @@ GEM
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
     slop (3.6.0)
-    yard (0.9.5)
+    yard (0.9.9)
 
 PLATFORMS
   ruby
@@ -47,8 +50,8 @@ PLATFORMS
 DEPENDENCIES
   binding_of_caller
   pry
+  pry-doc
   pry-rescue
   pry-stack_explorer
   rspec (>= 3.5.0)
   to-poker!
-  yard

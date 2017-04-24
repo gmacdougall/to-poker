@@ -6,10 +6,9 @@ group :development, :test do
   gem 'binding_of_caller'
 
   gem 'pry'
+  gem 'pry-doc'
   gem 'pry-stack_explorer'
   gem 'pry-rescue'
-
-  gem 'yard'
 end
 
 gemspec
