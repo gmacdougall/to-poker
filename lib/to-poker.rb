@@ -8,4 +8,5 @@ def reload!
   load 'to-poker.rb'
 end
 
-load 'card.rb'
+require 'card'
+require 'hand'
